@@ -1,4 +1,4 @@
-package com.example.letscode;
+package com.example.letscode.controller;
 
 import com.example.letscode.models.Product;
 import com.example.letscode.service.ProductService;
@@ -17,8 +17,8 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/")
-    public String products(Model model) {
-        model.addAttribute("products", productService.list());
+    public String products(@RequestParam(name = "title", required = false) Model model, String title) {
+        model.addAttribute("products", productService.list(title));
         return "products";
     }
 

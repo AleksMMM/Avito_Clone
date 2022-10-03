@@ -1,17 +1,34 @@
 package com.example.letscode.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
+
+@Entity
+@Table(name = "products")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 
-    protected Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+    @Column(name = "title")
     private String title;
+    @Column(name = "description", columnDefinition = "text")
     private String description;
+    @Column(name = "price")
     private int price;
+    @Column(name = "city")
     private String city;
+    @Column(name = "author")
     private String author;
 
 }

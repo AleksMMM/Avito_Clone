@@ -1,13 +1,21 @@
 package com.example.letscode.service;
 
 import com.example.letscode.models.Product;
+import com.example.letscode.repositories.ProductRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class ProductService {
+
+    private final ProductRepository productRepository;
 
     private List<Product> productList = new ArrayList<>();
     private Long id = 0L;
@@ -32,20 +40,26 @@ public class ProductService {
                 .build());
     }
 
-    public List<Product> list() {
-        return productList;
+    public List<Product> list(String title) {
+
+        if (title != null) {
+          return productRepository.findByTitle(title);
+        }
+        return productRepository.findAll();
     }
 
     public void saveProduct(Product product) {
-        product.setId(id++);
-        productList.add(product);
+
+        log.info("save new {}", product);
+        productRepository.save(product);
+
     }
 
     public void delete(Long id) {
-        productList.removeIf(product -> product.getId().equals(id));
+        productRepository.deleteById(id);
     }
 
     public Product getProductById(Long id) {
-        return productList.get(id.intValue());
+        return productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("no element"));
     }
 }
